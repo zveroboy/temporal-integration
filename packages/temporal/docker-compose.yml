@@ -79,18 +79,18 @@ services:
     ports:
       - 8088:8088
   # the experimental new UI version, on 8080
-  temporal-ui:
-    container_name: temporal-ui
-    depends_on:
-      - temporal
-    environment:
-      - TEMPORAL_ADDRESS=temporal:7233
-      - TEMPORAL_CORS_ORIGINS=http://localhost:3000
-    image: temporalio/ui:0.3.0
-    #     networks:
-    #       - temporal-network
-    ports:
-      - 8080:8080
+  # temporal-ui:
+  #   container_name: temporal-ui
+  #   depends_on:
+  #     - temporal
+  #   environment:
+  #     - TEMPORAL_ADDRESS=temporal:7233
+  #     - TEMPORAL_CORS_ORIGINS=http://localhost:3000
+  #   image: temporalio/ui:0.3.0
+  #   #     networks:
+  #   #       - temporal-network
+  #   ports:
+  #     - 8080:8080
 
   ## uncomment only if you need these features, eg you are Johannes
   ## Collector
