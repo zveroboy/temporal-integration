@@ -1,6 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { ethers } from 'ethers';
 import { PrismaService } from '../prisma';
+import { IndexerServiceService as IndexerService } from './indexer.service';
 
 const abi = [
   {
@@ -239,9 +240,10 @@ export const createJrpcProvider = () => {
 };
 
 @Injectable()
-export class HistoryReplayServiceService {
+export class HistoryReplayService {
   constructor(
     private readonly prismaService: PrismaService,
+    private readonly indexerService: IndexerService,
   ){}
 
   async executeFilter(){
@@ -274,33 +276,8 @@ export class HistoryReplayServiceService {
     // process.stdout.write('aaaa');
   }
 
-  async executeGet(){
-
-    const provider = createJrpcProvider();
-
-    const marketplaceV2ContractReadonly = new ethers.Contract(
-      '0xC122A7135282Adb40F2826E6D522240464Fd3DF6',
-      abi,
-      provider
-    );
-
-    const listed = marketplaceV2ContractReadonly.filters.TokenListed();
-    const listedLogs = await marketplaceV2ContractReadonly.queryFilter(listed, 27511112, 27511182);
-
-    const listedLogDesc = listedLogs.map((log) => marketplaceV2ContractReadonly.interface.parseLog(log));
-
-    const event = await this.prismaService.event.create({
-      data: {
-        chainId: BenanceTestNetwork.chainId.toString(),
-        collectionAddress: listedLogDesc[0].args[0],
-        eventName: listedLogDesc[0].name,
-        payload: listedLogDesc[0].args
-      }
-    })
-    
-    console.log({event})
-
-    // console.dir({listedLogDesc: JSON.stringify(listedLogDesc[0]['args'])})
-    // process.stdout.write('aaaa');
+  async execute(){
+    const events = await this.prismaService.event.findMany();
+    await this.indexerService.processOfferEvents(events);
   }
 }

@@ -1,12 +1,12 @@
 import { Command, CommandRunner } from 'nest-commander';
 
-import { HistoryReplayServiceService } from './history-replay-service.service';
+import { HistoryReplayService } from './history-replay.service';
 
 @Command({
   name: 'history-replay',
 })
 export class HistoryReplayCommand extends CommandRunner {
-  constructor(private readonly service: HistoryReplayServiceService) {
+  constructor(private readonly service: HistoryReplayService) {
     super();
   }
 
