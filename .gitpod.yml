@@ -8,13 +8,13 @@ tasks:
   - name: Turbo
     init: npm install && npm run build
     command: npm run dev -w
-  - name: Temporal Server
-    init: |
-      cd packages/temporal
-      docker-compose pull
-    command:  |
-      cd packages/temporal
-      docker-compose up
+  # - name: Temporal Server
+    # init: |
+      # cd packages/temporal
+      # docker-compose pull
+    # command:  |
+      # cd packages/temporal
+      # docker-compose up
 
 ports:
   - port: 5432 # postgres
