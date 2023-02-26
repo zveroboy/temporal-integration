@@ -9,3 +9,25 @@ datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
 }
+
+model Event {
+  id                    String @id @default(uuid()) @db.Uuid
+  chainId               String @map("chain_id")
+  collectionAddress     String @map("collection_address")
+  eventName             String @map("event_name")
+  payload               Json
+
+  @@map("events")
+}
+
+model Token {
+  id String @id @default(uuid()) @db.Uuid
+  chainId               String @map("chain_id")
+  collectionAddress     String @map("collection_address")
+  tokenId               String @map("token_id")
+  meta                  Json?
+  machine               Json?
+
+  @@unique([chainId, collectionAddress, tokenId])
+  @@map("tokens")
+}
